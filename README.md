@@ -39,7 +39,7 @@ The currently supported languages are
 
 ## PEG.js
 
-The most recent version of [PlantUML](http://plantuml.sourceforge.net/) does not have a defined grammar to use with
+The most recent version of [PlantUML](https://plantuml.com/zh/guide) does not have a defined grammar to use with
 parsing the PlantUML code. Below is a guess as to what the grammer for
 the language should be, relative to the [PEG.js](https://github.com/dmajda/pegjs) parser. This creates
 a parser which is then used in the creation of all output files. This grammar should validate to any valid PlantUML file.
