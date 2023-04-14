@@ -124,8 +124,6 @@ npm test
 If you update the PEGJS grammar file `src/plantuml.pegjs`(https://github.com/roryyu/plantuml-code-generator/blob/master/src/plantuml.pegjs) you must run this command to update the corresponding
 `src/plantuml.js` file.
 
-修改 plantuml.pegjs 后运行 npm run build,src/plantuml.js 规则就改变了
-
 ```
 npm run build
 ```
