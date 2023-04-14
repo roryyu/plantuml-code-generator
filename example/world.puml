@@ -1,0 +1,51 @@
+@startuml
+class "root" as root {
+    .. Properties ..
+    name: Product
+    .. Objects ..
+    properties: [object Object]
+}
+class "properties" as root.properties {
+    .. Properties ..
+    .. Objects ..
+    id: [object Object]
+    name: [object Object]
+    price: [object Object]
+    tags: [object Object]
+}
+class "id" as root.properties.id {
+    .. Properties ..
+    type: number
+    description: Product identifier
+    required: true
+}
+class "name" as root.properties.name {
+    .. Properties ..
+    description: Name of the \nproduct
+    type: string
+    required: true
+}
+class "price" as root.properties.price {
+    .. Properties ..
+    type: number
+    minimum: 0
+    required: true
+}
+class "tags" as root.properties.tags {
+    .. Properties ..
+    type: array
+    .. Objects ..
+    items: [object Object]
+}
+class "items" as root.properties.tags.items {
+    .. Properties ..
+    type: string
+}
+root.properties.tags -- root.properties.tags.items
+root.properties -- root.properties.id
+root.properties -- root.properties.name
+root.properties -- root.properties.price
+root.properties -- root.properties.tags
+root -- root.properties
+@enduml
+

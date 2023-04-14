@@ -22,19 +22,21 @@ Options:
 ```
 
 The currently supported languages are
-* CoffeeScript (coffeescript) [default]
-* C# (csharp)
-* ECMAScript5 (javascript)
-* ECMAScript6 (javascript2.0)
-* Java (java)
-* PHP (php)
-* Python (python)
-* Ruby (ruby)
-* TypeScript (typescript)
-* Swift (swift)
-* Kotlin (kotlin)
+
+- CoffeeScript (coffeescript) [default]
+- C# (csharp)
+- ECMAScript5 (javascript)
+- ECMAScript6 (javascript2.0)
+- Java (java)
+- PHP (php)
+- Python (python)
+- Ruby (ruby)
+- TypeScript (typescript)
+- Swift (swift)
+- Kotlin (kotlin)
 
 ## PEG.js
+
 The most recent version of [PlantUML](http://plantuml.sourceforge.net/) does not have a defined grammar to use with
 parsing the PlantUML code. Below is a guess as to what the grammer for
 the language should be, relative to the [PEG.js](https://github.com/dmajda/pegjs) parser. This creates
@@ -171,6 +173,7 @@ protectedaccessor
 ```
 
 ## Goals
+
 Initially this project will only run with node.js and output coffeescript classes.
 The general idea is that, given any PlantUML file, we will be able
 to generate class files in any output language. Eventually moving on from node.js and supporting
@@ -195,11 +198,11 @@ abstract Car {
   + String getMake()
   + Number getYear()
 }
-  
+
 class Toyota
 class Honda
 class Ford
-  
+
 Toyota --|> Car
 Honda --|> Car
 Ford --|> Car
@@ -234,11 +237,12 @@ class Ford extends Car
 ### Running:
 
 ```
-npm install
-plantcode -l coffescript tests/car.pegjs > tests/car.coffee
+npm i
+npx plantcode -l coffescript tests/car.pegjs > tests/car.coffee
 ```
 
 ### Testing:
+
 ```
 npm test
 ```
@@ -248,6 +252,22 @@ npm test
 If you update the PEGJS grammar file `src/plantuml.pegjs` you must run this command to update the corresponding
 `src/plantuml.js` file.
 
+修改 plantuml.pegjs 后运行 npm run build,src/plantuml.js 规则就改变了
+
 ```
 npm run build
+```
+
+## add functions
+
+### examples json to puml
+
+```shell
+npx plantcode -l puml ./example/world.json > ./example/world.puml
+```
+
+### examples puml to json
+
+```shell
+npx plantcode -l json ./example/hello.puml > ./example/hello.json
 ```

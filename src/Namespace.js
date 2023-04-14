@@ -1,5 +1,5 @@
-
-module.exports = (function () {
+var { _export } = require('./util');
+module.exports = _export(function () {
 
   var Class = require("./Class");
   var AbstractClass = require("./AbstractClass");
@@ -11,11 +11,11 @@ module.exports = (function () {
     this.nNamespace = null;
     this.init();
   }
-  
+
   Namespace.prototype.getName = function () {
     return this.namespaceName;
   }
-  
+
   Namespace.prototype.getItems = function () {
     return this.aItems;
   }
@@ -27,7 +27,7 @@ module.exports = (function () {
   Namespace.prototype.getNamespace = function () {
     return this.nNamespace;
   }
-  
+
   Namespace.prototype.getFullName = function () {
     var aFull = [this.getName()];
     var nSpace = this.getNamespace();

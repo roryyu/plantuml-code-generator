@@ -1,0 +1,258 @@
+[{
+  "cExtends": null,
+  "fileLines": [
+    {
+      "aParameters": [
+        {
+          "sReturnType": "String",
+          "sParameterName": "model"
+        }
+      ],
+      "sReturnType": "void",
+      "sAccessType": "+",
+      "sFieldName": "setModel"
+    },
+    {
+      "aParameters": [
+        {
+          "sReturnType": "String",
+          "sParameterName": "make"
+        }
+      ],
+      "sReturnType": "void",
+      "sAccessType": "+",
+      "sFieldName": "setMake"
+    },
+    {
+      "aParameters": [
+        {
+          "sReturnType": "Number",
+          "sParameterName": null
+        }
+      ],
+      "sReturnType": "void",
+      "sAccessType": "+",
+      "sFieldName": "setYear"
+    },
+    {
+      "aParameters": [],
+      "sReturnType": "String",
+      "sAccessType": "+",
+      "sFieldName": "getModel"
+    },
+    {
+      "aParameters": [],
+      "sReturnType": "String",
+      "sAccessType": "+",
+      "sFieldName": "getMake"
+    },
+    {
+      "aParameters": [],
+      "sReturnType": "Number",
+      "sAccessType": "+",
+      "sFieldName": "getYear"
+    }
+  ],
+  "className": "Car",
+  "nNamespace": null
+},
+
+{
+  "cExtends": {
+    "cExtends": null,
+    "fileLines": [
+      {
+        "aParameters": [
+          {
+            "sReturnType": "String",
+            "sParameterName": "model"
+          }
+        ],
+        "sReturnType": "void",
+        "sAccessType": "+",
+        "sFieldName": "setModel"
+      },
+      {
+        "aParameters": [
+          {
+            "sReturnType": "String",
+            "sParameterName": "make"
+          }
+        ],
+        "sReturnType": "void",
+        "sAccessType": "+",
+        "sFieldName": "setMake"
+      },
+      {
+        "aParameters": [
+          {
+            "sReturnType": "Number",
+            "sParameterName": null
+          }
+        ],
+        "sReturnType": "void",
+        "sAccessType": "+",
+        "sFieldName": "setYear"
+      },
+      {
+        "aParameters": [],
+        "sReturnType": "String",
+        "sAccessType": "+",
+        "sFieldName": "getModel"
+      },
+      {
+        "aParameters": [],
+        "sReturnType": "String",
+        "sAccessType": "+",
+        "sFieldName": "getMake"
+      },
+      {
+        "aParameters": [],
+        "sReturnType": "Number",
+        "sAccessType": "+",
+        "sFieldName": "getYear"
+      }
+    ],
+    "className": "Car",
+    "nNamespace": null
+  },
+  "fileLines": [
+    {
+      "sAccessType": "-",
+      "sReturnType": "String",
+      "sFieldName": "name"
+    }
+  ],
+  "className": "Toyota",
+  "nNamespace": null
+},
+
+{
+  "cExtends": {
+    "cExtends": null,
+    "fileLines": [
+      {
+        "aParameters": [
+          {
+            "sReturnType": "String",
+            "sParameterName": "model"
+          }
+        ],
+        "sReturnType": "void",
+        "sAccessType": "+",
+        "sFieldName": "setModel"
+      },
+      {
+        "aParameters": [
+          {
+            "sReturnType": "String",
+            "sParameterName": "make"
+          }
+        ],
+        "sReturnType": "void",
+        "sAccessType": "+",
+        "sFieldName": "setMake"
+      },
+      {
+        "aParameters": [
+          {
+            "sReturnType": "Number",
+            "sParameterName": null
+          }
+        ],
+        "sReturnType": "void",
+        "sAccessType": "+",
+        "sFieldName": "setYear"
+      },
+      {
+        "aParameters": [],
+        "sReturnType": "String",
+        "sAccessType": "+",
+        "sFieldName": "getModel"
+      },
+      {
+        "aParameters": [],
+        "sReturnType": "String",
+        "sAccessType": "+",
+        "sFieldName": "getMake"
+      },
+      {
+        "aParameters": [],
+        "sReturnType": "Number",
+        "sAccessType": "+",
+        "sFieldName": "getYear"
+      }
+    ],
+    "className": "Car",
+    "nNamespace": null
+  },
+  "fileLines": [],
+  "className": "Honda",
+  "nNamespace": null
+},
+
+{
+  "cExtends": {
+    "cExtends": null,
+    "fileLines": [
+      {
+        "aParameters": [
+          {
+            "sReturnType": "String",
+            "sParameterName": "model"
+          }
+        ],
+        "sReturnType": "void",
+        "sAccessType": "+",
+        "sFieldName": "setModel"
+      },
+      {
+        "aParameters": [
+          {
+            "sReturnType": "String",
+            "sParameterName": "make"
+          }
+        ],
+        "sReturnType": "void",
+        "sAccessType": "+",
+        "sFieldName": "setMake"
+      },
+      {
+        "aParameters": [
+          {
+            "sReturnType": "Number",
+            "sParameterName": null
+          }
+        ],
+        "sReturnType": "void",
+        "sAccessType": "+",
+        "sFieldName": "setYear"
+      },
+      {
+        "aParameters": [],
+        "sReturnType": "String",
+        "sAccessType": "+",
+        "sFieldName": "getModel"
+      },
+      {
+        "aParameters": [],
+        "sReturnType": "String",
+        "sAccessType": "+",
+        "sFieldName": "getMake"
+      },
+      {
+        "aParameters": [],
+        "sReturnType": "Number",
+        "sAccessType": "+",
+        "sFieldName": "getYear"
+      }
+    ],
+    "className": "Car",
+    "nNamespace": null
+  },
+  "fileLines": [],
+  "className": "Ford",
+  "nNamespace": null
+}
+
+]

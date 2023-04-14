@@ -14,7 +14,8 @@
     "url": "git://github.com/bafolts/plantuml-code-generator.git"
   },
   "dependencies": {
-    "handlebars": "^4.7.6"
+    "handlebars": "^4.7.6",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "nyc": "^15.1.0",

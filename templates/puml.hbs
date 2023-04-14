@@ -1,0 +1,19 @@
+@startuml
+{{#each newObj}}
+class "{{clsName}}" as {{clsNameFullReference}} {
+    .. Properties ..
+    {{#each clsProperties}}
+    {{.}}
+    {{/each}}
+    {{~#if clsObjects}}
+    .. Objects ..
+    {{#each clsObjects}}
+    {{.}}
+    {{/each}}  
+    {{~/if~}}
+}
+{{/each}}
+{{#each objRelations}}
+{{.}}
+{{/each}}
+@enduml

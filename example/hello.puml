@@ -1,0 +1,24 @@
+@startuml hello
+
+hide empty members
+title hello title
+abstract Car {
+  + void setModel(String model)
+  + void setMake(String make)
+  + void setYear(Number)
+  + String getModel()
+  + String getMake()
+  + Number getYear()
+}
+  
+class Toyota {
+  - String name
+}
+class Honda
+class Ford
+  
+Toyota --|> Car
+Honda --|> Car
+Ford --|> Car
+
+@enduml

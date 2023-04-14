@@ -3,31 +3,39 @@
 var fs = require("fs");
 var hbs = require("handlebars");
 var parser = require("./src/plantuml");
+var plantumlify = require("./src/plantumlify");
 var os = require("os");
 
 var options = {
   language: "coffeescript",
   output: null
 };
+var PrefixSuffixDivide = {
+  'json': {
+    prefix: '[',
+    suffix: ']',
+    devide: ','
+  }
+}
 
-var supported_languages = ["coffeescript", "csharp", "ecmascript5", "ecmascript6", "java", "php", "python", "ruby", "typescript","swift", "kotlin"];
+var supported_languages = ["coffeescript", "csharp", "ecmascript5", "ecmascript6", "java", "php", "python", "ruby", "typescript", "swift", "kotlin", "json", "puml"];
 
 var args = process.argv.slice(2); // Trim "node" and the script path.
 
-hbs.registerHelper('if_ne', function(a, b, opts) {
-    if (a() != b) {
-        return opts.fn(this);
-    } else {
-        return opts.inverse(this);
-    }
+hbs.registerHelper('if_ne', function (a, b, opts) {
+  if (a() != b) {
+    return opts.fn(this);
+  } else {
+    return opts.inverse(this);
+  }
 });
 
 // sReturnType Check
-hbs.registerHelper('if_ne2', function(a, b, opts) {
+hbs.registerHelper('if_ne2', function (a, b, opts) {
   if (a["sReturnType"] != b) {
-      return opts.fn(this);
+    return opts.fn(this);
   } else {
-      return opts.inverse(this);
+    return opts.inverse(this);
   }
 });
 
@@ -57,7 +65,7 @@ function printUsage() {
   console.log("      --show-languages               displays all the current supported");
   console.log("                                     programming languages for use")
   console.log("                                     for with the language option");
-  console.log("  -h, --help                         print help and exit");
+  console.log("  -h, --help                        print help and exit");
   exitSuccess();
 }
 
@@ -104,7 +112,7 @@ function getArguments() {
   switch (args.length) {
     case 1:
       options.input = args[0];
-    break;
+      break;
     default:
       abort("No input file provided.");
   }
@@ -148,49 +156,69 @@ function nextArg() {
   args.shift();
 }
 
-function processInputFile(config, data) {
-  try {
-    var aUMLBlocks = parser.parse(data);
-  } catch(e) {
-    abort("Error parsing input file: ", config.input, e);
-  }
+function processInputFile(config, dataSource) {
   fs.readFile("templates/" + config.language + ".hbs", { encoding: "UTF-8" }, function (err, data) {
     if (err === null) {
-      processTemplateFile(config, data, aUMLBlocks);
+      if (config.language === 'puml') {
+        processTemplateFilePuml(config, data, dataSource)
+      } else {
+        try {
+          var aUMLBlocks = parser.parse(dataSource);
+        } catch (e) {
+          abort("Error parsing input file: ", config.input, e);
+        }
+        processTemplateFile(config, data, aUMLBlocks);
+      }
     } else {
       abort("Unable to read template file for " + config.language + ".");
     }
   });
 }
-
-function processTemplateFile(config, templateData, dictionary) {
-
+function processTemplateFilePuml(config, templateData, dataSource) {
+  var output = '';
   var template = hbs.compile(templateData);
-
+  output = plantumlify(dataSource, [], template)
+  if (config.output === null) {
+    console.log(output);
+  } else {
+    fs.writeFile(config.output, output, function (err) {
+      if (err !== null) {
+        abort("Unable to write output file for " + config.output + ".");
+      }
+    })
+  }
+}
+function processTemplateFile(config, templateData, dictionary) {
   var output = "";
-
+  var { prefix, suffix, devide } = PrefixSuffixDivide[config.language] ? PrefixSuffixDivide[config.language] : { prefix: '', suffix: '', devide: '' };
+  output += prefix;
+  var template = hbs.compile(templateData);
   dictionary.forEach(function (element) {
-    element.getClasses().forEach(function (element) {
+    var clses = element.getClasses()
+    clses.forEach(function (element, index) {
       output += template(element, {
         allowedProtoMethods: {
-         "getExtends": true,
-         "getFields": true,
-         "getFullName": true,
-         "getKeyword": true,
-         "getMethods": true,
-         "getName": true,
-         "getParameters": true,
-         "getReturnType": true,
-         "hasFields": true,
-         "hasMethods": true,
-         "isPrivate": true,
-         "isProtected": true,
-         "isPublic": true,
-         "needsReturnStatement": true
+          "getExtends": true,
+          "getFields": true,
+          "getFullName": true,
+          "getKeyword": true,
+          "getMethods": true,
+          "getName": true,
+          "getParameters": true,
+          "getReturnType": true,
+          "hasFields": true,
+          "hasMethods": true,
+          "isPrivate": true,
+          "isProtected": true,
+          "isPublic": true,
+          "needsReturnStatement": true,
+          "getFullJson": true
         }
-      }) + os.EOL + os.EOL;
+      }) + ((index < clses.length - 1) ? devide : '') + os.EOL + os.EOL;
     })
   })
+  output += suffix;
+
 
   if (config.output === null) {
     console.log(output);
@@ -220,7 +248,7 @@ function processTemplateFile(config, templateData, dictionary) {
 //   {{#call ../this ../getFullName}}
 // {{/each}}
 hbs.registerHelper('call', function (context, member, options) {
-   return member.call(context);
+  return member.call(context);
 });
 
 exports.convertFile = convertFile;

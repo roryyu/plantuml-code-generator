@@ -1,5 +1,6 @@
 
-module.exports = (function () {
+var { _export } = require('./util');
+module.exports = _export(function () {
 
   var Field = require("./Field");
   var Method = require("./Method");
@@ -14,11 +15,11 @@ module.exports = (function () {
   Interface.prototype.getKeyword = function () {
     return "interface";
   }
-  
+
   Interface.prototype.setExtends = function (interfaceName) {
     this.cExtends = interfaceName;
   }
-  
+
   Interface.prototype.getExtends = function () {
     return this.cExtends;
   }
@@ -26,7 +27,7 @@ module.exports = (function () {
   Interface.prototype.setNamespace = function (namespace) {
     this.nNamespace = namespace;
   }
-  
+
   Interface.prototype.getNamespace = function () {
     return this.nNamespace;
   }
@@ -34,7 +35,7 @@ module.exports = (function () {
   Interface.prototype.getName = function () {
     return this.interfaceName;
   }
- 
+
   Interface.prototype.hasMethods = function () {
     for (var i = 0, length = this.fileLines.length; i < length; i++) {
       if (this.fileLines[i] instanceof Method) {
@@ -43,7 +44,7 @@ module.exports = (function () {
     }
     return false;
   }
- 
+
   Interface.prototype.getMethods = function () {
     var aResult = [];
     for (var i = 0, length = this.fileLines.length; i < length; i++) {
@@ -53,7 +54,7 @@ module.exports = (function () {
     }
     return aResult;
   }
- 
+
   Interface.prototype.hasFields = function () {
     for (var i = 0, length = this.fileLines.length; i < length; i++) {
       if (!(this.fileLines[i] instanceof Method) && this.fileLines[i] instanceof Field) {
@@ -62,7 +63,7 @@ module.exports = (function () {
     }
     return false;
   }
- 
+
   Interface.prototype.getFields = function () {
     var aResult = [];
     for (var i = 0, length = this.fileLines.length; i < length; i++) {
