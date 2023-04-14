@@ -2,6 +2,8 @@
 
 Provides a command line utility to generate code in various languages given a plantuml class diagram.
 
+add extra functions: puml to json & json to puml
+
 ## Command line options
 
 ```shell
@@ -128,7 +130,7 @@ If you update the PEGJS grammar file `src/plantuml.pegjs`(https://github.com/ror
 npm run build
 ```
 
-## add functions
+## add extra functions
 
 ### examples json to puml
 
