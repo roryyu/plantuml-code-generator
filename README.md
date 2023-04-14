@@ -42,136 +42,6 @@ parsing the PlantUML code. Below is a guess as to what the grammer for
 the language should be, relative to the [PEG.js](https://github.com/dmajda/pegjs) parser. This creates
 a parser which is then used in the creation of all output files. This grammar should validate to any valid PlantUML file.
 
-```
-plantumlfile
-  = items:((noise newline { return null }) / (noise "@startuml" noise newline filelines:umllines noise "@enduml" noise { var UMLBlock = require("./UMLBlock"); return new UMLBlock(filelines) }))* { for (var i = 0; i < items.length; i++) { if (items[i] === null) { items.splice(i, 1); i--; } } return items }
-umllines
-  = lines:(umlline*) { for (var i = 0; i < lines.length; i++) { if (lines[i]===null) { lines.splice(i, 1); i--; } } return lines; }
-umlline
-  = propertyset newline { return null }
-  / titleset newline { return null }
-  / noise newline { return null }
-  / commentline { return null }
-  / noteline { return null }
-  / hideline newline { return null }
-  / skinparams newline { return null }
-  / declaration:packagedeclaration newline { return declaration }
-  / declaration:namespacedeclaration newline { return declaration }
-  / declaration:classdeclaration newline { return declaration }
-  / declaration:interfacedeclaration newline { return declaration }
-  / declaration:abstractclassdeclaration newline { return declaration }
-  / declaration:memberdeclaration newline { return declaration }
-  / declaration:connectordeclaration newline { return declaration }
-hideline
-  = noise "hide empty members" noise
-skinparams
-  = noise "skinparam" noise [^\r\n]+
-connectordeclaration
-  = noise leftObject:objectname noise connectordescription? noise connector:connectortype noise connectordescription? noise rightObject:objectname noise ([:] [^\r\n]+)? { var Connection = require("./Connection"); return new Connection(leftObject, connector, rightObject) }
-connectordescription
-  = noise ["]([\\]["]/[^"])*["] noise
-titleset
-  = noise "title " noise [^\r\n]+ noise
-commentline
-  = noise "'" [^\r\n]+ noise
-  / noise ".." [^\r\n\.]+ ".." noise
-  / noise "--" [^\r\n\-]+ "--" noise
-  / noise "__" [^\r\n\_]+ "__" noise
-noteline
-  = noise "note " noise [^\r\n]+ noise
-connectortype
-  = item:extends { return item }
-  / concatenates { var Composition = require("./Composition"); return new Composition() }
-  / aggregates { var Aggregation = require("./Aggregation"); return new Aggregation() }
-  / connectorsize { return null }
-extends
-  = "<|" connectorsize { var Extension = require("./Extension"); return new Extension(true) }
-  / connectorsize "|>" { var Extension = require("./Extension"); return new Extension(false) }
-connectorsize
-  = ".."
-  / "-up-"
-  / "-down-"
-  / "-left-"
-  / "-right-"
-  / "---"
-  / "--"
-  / [.]
-  / [-]
-concatenates
-  = "*" connectorsize
-  / connectorsize [*]
-aggregates
-  = "o" connectorsize
-  / connectorsize [o]
-startblock
-  = noise [{] noise
-endblock
-  = noise [}]
-propertyset
-  = "setpropname.*"
-packagedeclaration
-  = "package " objectname startblock newline umllines endblock
-  / "package " objectname newline umllines "end package"
-abstractclassdeclaration
-  = noise "abstract " noise "class "? noise classname:objectname noise startblock lines:umllines endblock { var AbstractClass = require("./AbstractClass"); return new AbstractClass(classname, lines) }
-  / noise "abstract " noise "class "? noise classname:objectname noise { var AbstractClass = require("./AbstractClass"); return new AbstractClass(classname) }
-  / noise "abstract " noise "class "? noise classname:objectname noise newline noise lines:umllines "end class" { var AbstractClass = require("./AbstractClass"); return new AbstractClass(classname, lines) }
-noise
-  = [ \t]*
-newline
-  = [\r\n]
-  / [\n]
-classdeclaration
-  = noise "class " noise classname:objectname noise startblock lines:umllines endblock { var Class = require("./Class"); return new Class(classname, lines) }
-  / noise "class " noise classname:objectname noise "<<" noise [^>]+ noise ">>" noise { var Class = require("./Class"); return new Class(classname) }
-  / noise "class " noise classname:objectname noise { var Class = require("./Class"); return new Class(classname) }
-  / noise "class " noise classname:objectname noise newline noise lines:umllines "end class" { var Class = require("./Class"); return new Class(classname, lines) }
-interfacedeclaration
-  = noise "interface " noise interfacename:objectname noise startblock lines:umllines endblock { var Interface = require("./Interface"); return new Interface(interfacename, lines) }
-  / noise "interface " noise interfacename:objectname noise "<<" noise [^>]+ noise ">>" noise { var Interface = require("./Interface"); return new Interface(interfacename) }
-  / noise "interface " noise interfacename:objectname noise { var Interface = require("./Interface"); return new Interface(interfacename) }
-  / noise "interface " noise interfacename:objectname noise newline noise lines:umllines "end interface" { var  Interface = require("./Interface"); return new Interface(interfacename, lines) }
-color
-  = [#][0-9a-fA-F]+
-namespacedeclaration
-  = noise "namespace " noise namespacename:objectname noise color? noise startblock lines:umllines endblock { var Namespace = require("./Namespace"); return new Namespace(namespacename, lines) }
-  / noise "namespace " noise namespacename:objectname noise newline umllines "end namespace" { var Namespace = require("./Namespace"); return new Namespace(namespacename) }
-staticmemberdeclaration
-  = "static " memberdeclaration
-memberdeclaration
-  = declaration:methoddeclaration { return declaration }
-  / declaration:fielddeclaration { return declaration }
-fielddeclaration
-  = noise accessortype:accessortype noise returntype:returntype noise membername:membername noise { var Field = require("./Field"); return new Field(accessortype, returntype, membername) }
-  / noise accessortype:accessortype noise membername:membername noise [:] noise returntype:returntype noise { var Field = require("./Field"); return new Field(accessortype, returntype, membername) }
-  / noise accessortype:accessortype noise membername:membername noise { var Field = require("./Field"); return new Field(accessortype, "void", membername) }
-  / noise returntype:returntype noise membername:membername noise { var Field = require("./Field"); return new Field("+", returntype, membername) }
-  / noise membername:membername noise [:] noise returntype:returntype noise { var Field = require("./Field"); return new Field("+", returntype, membername) }
-methoddeclaration
-  = noise field:fielddeclaration [(] parameters:methodparameters [)] noise [:] noise returntype:returntype noise { var Method = require("./Method"); return new Method(field.getAccessType(), returntype, field.getName(), parameters); }
-  / noise field:fielddeclaration [(] parameters:methodparameters [)] noise { var Method = require("./Method"); return new Method(field.getAccessType(), field.getReturnType(), field.getName(), parameters); }
-methodparameters
-  = items:methodparameter* { return items; }
-methodparameter
-  = noise item:returntype membername:([ ] membername)? [,]? { var Parameter = require("./Parameter"); return new Parameter(item, membername ? membername[1] : null); }
-returntype
-  = items:[^ ,\n\r\t(){}]+ { return items.join("") }
-objectname
-  = objectname:([A-Za-z_][A-Za-z0-9.]*) { return [objectname[0], objectname[1].join("")].join("") }
-membername
-  = items:([A-Za-z_][A-Za-z0-9_]*) { return [items[0], items[1].join("")].join("") }
-accessortype
-  = publicaccessor
-  / privateaccessor
-  / protectedaccessor
-publicaccessor
-  = [+]
-privateaccessor
-  = [-]
-protectedaccessor
-  = [#]
-```
-
 ## Goals
 
 Initially this project will only run with node.js and output coffeescript classes.
@@ -249,7 +119,7 @@ npm test
 
 ### Updating PEGJS grammar:
 
-If you update the PEGJS grammar file `src/plantuml.pegjs` you must run this command to update the corresponding
+If you update the PEGJS grammar file `src/plantuml.pegjs`(https://github.com/roryyu/plantuml-code-generator/blob/master/src/plantuml.pegjs) you must run this command to update the corresponding
 `src/plantuml.js` file.
 
 修改 plantuml.pegjs 后运行 npm run build,src/plantuml.js 规则就改变了
